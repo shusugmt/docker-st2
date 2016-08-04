@@ -24,7 +24,7 @@ docker-compose exec st2 bash
 ```
 
 ```
-st2 --versioon
+st2 --version
 st2 -h
 st2 auth test -p changeme
 
