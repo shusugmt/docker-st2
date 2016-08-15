@@ -5,7 +5,10 @@ services:
     image: st2
     build:
       context: ../
-    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
     ports:
       - "443:443"
     networks:
