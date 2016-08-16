@@ -10,7 +10,6 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
-CMD ["/usr/sbin/init"]
 
 RUN yum -y update
 
@@ -37,8 +36,6 @@ RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/s
 
 RUN rm -rf /tmp/pseudo
 
-RUN systemctl enable nginx
-
 RUN yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel
 RUN yum clean all
 
@@ -46,5 +43,10 @@ RUN crudini --set /etc/st2/st2.conf database host 'mongo'
 RUN crudini --set /etc/st2/st2.conf messaging url 'amqp://guest:guest@rabbitmq:5672/'
 RUN crudini --set /etc/mistral/mistral.conf DEFAULT transport_url 'rabbit://guest:guest@rabbitmq:5672'
 RUN crudini --set /etc/mistral/mistral.conf database connection 'postgresql://mistral:StackStorm@postgres/mistral'
+
+RUN rm -f /etc/systemd/system/multi-user.target.wants/*
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD ["/entrypoint.sh"]
 
 EXPOSE 443
