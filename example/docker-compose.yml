@@ -17,7 +17,9 @@ services:
     volumes:
       - ./id_rsa:/home/stanley/.ssh/stanley_rsa:ro
     environment:
-      SERVICES: st2actionrunner st2rulesengine
+      MONGO_HOST: mongo
+      RABBITMQ_HOST: rabbitmq
+      POSTGRES_HOST: postgres
   rabbitmq:
     image: rabbitmq:3.6.4-management
     networks:
