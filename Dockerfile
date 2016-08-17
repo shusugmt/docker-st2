@@ -23,7 +23,6 @@ RUN sed -i '/nodocs/d' /etc/yum.conf
 RUN yum -y install sudo
 RUN sed -i -r "s/^Defaults\s+\+?requiretty/# Defaults requiretty/g" /etc/sudoers
 RUN sed -i -r "s/^Defaults\s+\+?secure_path.*/Defaults !secure_path/g" /etc/sudoers
-RUN cat /etc/sudoers
 
 RUN mkdir -p /tmp/pseudo/bin
 RUN ln -s /bin/true /tmp/pseudo/bin/systemctl
