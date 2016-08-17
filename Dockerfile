@@ -40,6 +40,8 @@ RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/s
 
 RUN rm -rf /tmp/pseudo
 
+RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
+
 RUN yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel
 RUN yum clean all
 

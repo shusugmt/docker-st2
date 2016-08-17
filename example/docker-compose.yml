@@ -20,6 +20,7 @@ services:
       MONGO_HOST: mongo
       RABBITMQ_HOST: rabbitmq
       POSTGRES_HOST: postgres
+      REDIS_HOST: redis
   rabbitmq:
     image: rabbitmq:3.6.4-management
     networks:
