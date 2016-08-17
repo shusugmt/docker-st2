@@ -40,6 +40,7 @@ RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/s
 
 RUN rm -rf /tmp/pseudo
 
+RUN yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel
 RUN yum clean all
 
 RUN crudini --set /etc/st2/st2.conf database host 'mongo'
