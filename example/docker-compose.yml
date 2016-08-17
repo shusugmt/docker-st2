@@ -2,7 +2,7 @@ version: '2'
 
 services:
   st2:
-    image: st2
+    image: s2ugimot/st2:latest
     build:
       context: ../
     cap_add:
@@ -47,11 +47,7 @@ services:
     volumes:
       - ./id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
   remote2:
-    image: st2-example-remote
-    networks:
-      - front-tier
-    volumes:
-      - ./id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
+    extends: remote1
 
 networks:
   front-tier:
