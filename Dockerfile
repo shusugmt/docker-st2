@@ -18,6 +18,8 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
+RUN sed -i '/nodocs/d' /etc/yum.conf
+
 RUN yum -y install sudo
 RUN sed -i -r "s/^Defaults\s+\+?requiretty/# Defaults requiretty/g" /etc/sudoers
 RUN sed -i -r "s/^Defaults\s+\+?secure_path.*/Defaults !secure_path/g" /etc/sudoers
@@ -35,11 +37,6 @@ RUN touch /tmp/pseudo/pg_hba.conf
 RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/scripts/st2bootstrap-el7.sh \
   | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
   | sed -e 's|/opt/stackstorm/mistral/bin/mistral-db-manage|/tmp/pseudo/bin/mistral-db-manage|g' \
-  | sed -e '/sudo yum -y install ${ST2_PKG}/s/$/ \&\& yum -y --setopt tsflags= reinstall st2/' \
-  | sed -e '/sudo yum -y install /s/rabbitmq-server//' \
-  | sed -e '/sudo yum -y install mongodb-org/d' \
-  | sed -e '/sudo yum -y install postgresql-server postgresql-contrib postgresql-devel/d' \
-  | sed -e 's|sudo -u postgres psql|/bin/true|' \
   | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=1.5.1
 
 RUN rm -rf /tmp/pseudo
