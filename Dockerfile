@@ -1,5 +1,12 @@
 FROM centos:7
 MAINTAINER "Shu Sugimoto" <shu@su.gimo.to>
+
+# run yum update first!
+# systemd package might be updated and that should come before the tweaks below
+RUN yum -y update
+
+# tweaks for running systemd inside container
+# see: https://hub.docker.com/_/centos/
 ENV container docker
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
@@ -10,8 +17,6 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
-
-RUN yum -y update
 
 RUN sed -i '/nodocs/d' /etc/yum.conf
 
