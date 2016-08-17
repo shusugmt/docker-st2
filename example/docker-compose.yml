@@ -21,6 +21,7 @@ services:
       RABBITMQ_HOST: rabbitmq
       POSTGRES_HOST: postgres
       REDIS_HOST: redis
+      WORKERS: 2
   rabbitmq:
     image: rabbitmq:3.6.4-management
     networks:

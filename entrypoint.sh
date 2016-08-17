@@ -10,6 +10,9 @@
 [ -v REDIS_HOST ] && \
   crudini --set /etc/st2/st2.conf coordination url redis://${REDIS_HOST}:6379
 
+[ -v WORKERS ] && \
+  echo WORKERS=$WORKERS > /etc/sysconfig/st2actionrunner
+
 SERVICES=${SERVICES:-"st2actionrunner st2api st2auth st2garbagecollector st2notifier st2resultstracker st2rulesengine st2sensorcontainer st2stream mistral nginx"}
 
 for SERVICE in $SERVICES; do
