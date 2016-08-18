@@ -1,0 +1,76 @@
+version: '2'
+
+services:
+  st2node1:
+    image: s2ugimot/st2:latest
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - ../id_rsa:/home/stanley/.ssh/stanley_rsa:ro
+      - st2-packs:/opt/stackstorm/packs
+    environment:
+      MONGO_HOST: mongo
+      RABBITMQ_HOST: rabbitmq
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+      WORKERS: 2
+  st2node2:
+    extends: st2node1
+    volumes:
+      - st2-packs:/opt/stackstorm/packs:ro
+  st2node3:
+    extends: st2node2
+  st2front:
+    image: s2ugimot/st2:latest
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "443:443"
+    networks:
+      - front-tier
+    volumes:
+      - ./nginx-lb-st2.conf:/etc/nginx/conf.d/st2.conf:ro
+    environment:
+      SERVICES: nginx
+  rabbitmq:
+    image: rabbitmq:3.6.4-management
+    networks:
+      - back-tier
+  mongo:
+    image: mongo:3.2.8
+    networks:
+      - back-tier
+  postgres:
+    image: postgres:9.5.3
+    networks:
+      - back-tier
+  redis:
+    image: redis:3.2.2
+    networks:
+      - back-tier
+  remote1:
+    image: st2-example-remote
+    build:
+      context: ../remote
+    networks:
+      - front-tier
+    volumes:
+      - ../id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
+  remote2:
+    extends: remote1
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+
+volumes:
+  st2-packs:
