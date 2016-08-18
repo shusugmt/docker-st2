@@ -12,7 +12,9 @@ services:
       - back-tier
     volumes:
       - ../id_rsa:/home/stanley/.ssh/stanley_rsa:ro
+      - ../id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
       - st2-packs:/opt/stackstorm/packs
+      - st2-configs:/opt/stackstorm/configs
     environment:
       MONGO_HOST: mongo
       RABBITMQ_HOST: rabbitmq
@@ -21,10 +23,8 @@ services:
       WORKERS: 2
   st2node2:
     extends: st2node1
-    volumes:
-      - st2-packs:/opt/stackstorm/packs:ro
   st2node3:
-    extends: st2node2
+    extends: st2node1
   st2front:
     image: s2ugimot/st2:latest
     cap_add:
@@ -74,3 +74,4 @@ networks:
 
 volumes:
   st2-packs:
+  st2-configs:

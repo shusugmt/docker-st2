@@ -16,6 +16,7 @@ services:
       - back-tier
     volumes:
       - ./id_rsa:/home/stanley/.ssh/stanley_rsa:ro
+      - ./id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
     environment:
       MONGO_HOST: mongo
       RABBITMQ_HOST: rabbitmq

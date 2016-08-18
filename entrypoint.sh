@@ -13,7 +13,7 @@
 [ -v WORKERS ] && \
   echo WORKERS=$WORKERS > /etc/sysconfig/st2actionrunner
 
-SERVICES=${SERVICES:-"st2actionrunner st2api st2auth st2garbagecollector st2notifier st2resultstracker st2rulesengine st2sensorcontainer st2stream mistral nginx"}
+SERVICES=${SERVICES:-"st2actionrunner st2api st2auth st2garbagecollector st2notifier st2resultstracker st2rulesengine st2sensorcontainer st2stream mistral nginx sshd"}
 
 for SERVICE in $SERVICES; do
   systemctl enable $SERVICE

@@ -42,6 +42,12 @@ RUN rm -rf /tmp/pseudo
 
 RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
 
+RUN yum -y install gcc
+
+RUN yum -y install openssh-server
+ADD delete-nologin.service /etc/systemd/system/delete-nologin.service
+RUN systemctl enable delete-nologin
+
 RUN yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel
 RUN yum clean all
 
