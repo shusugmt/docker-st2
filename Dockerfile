@@ -36,20 +36,20 @@ RUN touch /tmp/pseudo/pg_hba.conf
 RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/scripts/st2bootstrap-el7.sh \
   | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
   | sed -e 's|/opt/stackstorm/mistral/bin/mistral-db-manage|/tmp/pseudo/bin/mistral-db-manage|g' \
-  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=1.5.1
+  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=1.5.1 \
+ && yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel \
+ && yum clean all
 
 RUN rm -rf /tmp/pseudo
 
 RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
 
-RUN yum -y install gcc
+RUN yum -y install gcc \
+ && yum -y install openssh-server \
+ && yum clean all
 
-RUN yum -y install openssh-server
 ADD delete-nologin.service /etc/systemd/system/delete-nologin.service
 RUN systemctl enable delete-nologin
-
-RUN yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel
-RUN yum clean all
 
 RUN rm -f /etc/systemd/system/multi-user.target.wants/*
 ADD entrypoint.sh /entrypoint.sh
