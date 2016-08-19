@@ -46,6 +46,7 @@ RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
 
 RUN yum -y install gcc \
  && yum -y install openssh-server \
+ && yum -y install nfs-utils \
  && yum clean all
 
 ADD delete-nologin.service /etc/systemd/system/delete-nologin.service
