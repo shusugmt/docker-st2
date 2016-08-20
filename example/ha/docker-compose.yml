@@ -3,6 +3,8 @@ version: '2'
 services:
   st2node1:
     image: s2ugimot/st2:latest
+    build:
+      context: ../../
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -21,10 +23,16 @@ services:
       WORKERS: 2
       MOUNT_ST2_PACKS: -t nfs4 nfs:/packs
       MOUNT_ST2_CONFIGS: -t nfs4 nfs:/configs
+      HA: "true"
+      HA_FRONT_HOST: st2front
   st2node2:
     extends: st2node1
+    environment:
+      HA_ST2RULESENGINE: primary
   st2node3:
     extends: st2node1
+    environment:
+      HA_ST2SENSORCONTAINER: primary
   st2front:
     image: s2ugimot/st2:latest
     cap_add:

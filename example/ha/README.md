@@ -16,10 +16,10 @@ docker-compose exec st2node3 st2ctl reload --register-all
 
 # create virtualenvs for all packs on all nodes using st2 action!
 # same here, we use st2node1
-docker-compose exec st2node1 st2 run core.remote hosts="st2node1,st2node2,st2node3" cmd="sudo st2ctl reload --register-setup-virtualenvs"
+docker-compose exec st2node1 st2 run core.remote_sudo hosts="st2node1,st2node2,st2node3" cmd="st2ctl reload --register-setup-virtualenvs"
 
 # restart st2sensorcontainer on all nodes as always required when adding new packs
-docker-compose exec st2node2 st2 run core.remote hosts="st2node1,st2node2,st2node3" cmd="sudo st2ctl restart-component st2sensorcontainer"
+docker-compose exec st2node2 st2 run core.remote_sudo hosts="st2node1,st2node2,st2node3" cmd="st2ctl restart-component st2sensorcontainer"
 
 # setup mistral
 docker-compose exec --user postgres postgres psql -c "CREATE ROLE mistral WITH CREATEDB LOGIN ENCRYPTED PASSWORD 'StackStorm';"
@@ -28,10 +28,10 @@ docker-compose exec st2node1 /opt/stackstorm/mistral/bin/mistral-db-manage --con
 docker-compose exec st2node1 /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
 
 # restart mistral services on all nodes
-docker-compose exec st2node2 st2 run core.remote hosts="st2node1,st2node2,st2node3" cmd="sudo st2ctl restart-component mistral"
+docker-compose exec st2node2 st2 run core.remote_sudo hosts="st2node1,st2node2,st2node3" cmd="st2ctl restart-component mistral"
 
 # check status
-docker-compose exec st2node2 st2 run core.remote hosts="st2node1,st2node2,st2node3" cmd="sudo st2ctl status"
+docker-compose exec st2node2 st2 run core.remote_sudo hosts="st2node1,st2node2,st2node3" cmd="st2ctl status"
 
 # run sample mistral based workflow
 docker-compose exec st2node2 st2 run examples.mistral_examples

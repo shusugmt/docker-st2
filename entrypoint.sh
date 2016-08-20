@@ -26,5 +26,29 @@ for SERVICE in $SERVICES; do
   systemctl enable $SERVICE
 done
 
+if [ "${HA,,}" = "true" ]; then
+  cp /etc/nginx/conf.d/st2.conf.blueprint.sample /etc/nginx/conf.d/st2.conf
+  crudini --set /etc/st2/st2.conf mistral v2_base_url https://${HA_FRONT_HOST}/mistral/v2
+  crudini --set /etc/st2/st2.conf mistral api_url https://${HA_FRONT_HOST}/api
+  crudini --set /etc/st2/st2.conf mistral insecure True
+
+  # HA: st2rulesengine timer
+  crudini --set /etc/st2/st2.conf timer enable False
+  if [ "${HA_ST2RULESENGINE,,}" = "primary" ]; then
+    # enable timer for st2rulesengine only on "primary" node as described in the doc
+    crudini --set /etc/st2/st2.conf timer enable True
+  fi
+
+  # HA: st2sensorcontainer
+  systemctl disable st2sensorcontainer
+  systemctl mask st2sensorcontainer
+  if [ "${HA_ST2SENSORCONTAINER,,}" = "primary" ]; then
+    # enable st2sensorcontainer only on "primary" node
+    # currently sensor partitioning just provides performance, not HA
+    systemctl unmask st2sensorcontainer
+    systemctl enable st2sensorcontainer
+  fi
+fi
+
 # launch systemd
 exec /usr/sbin/init
