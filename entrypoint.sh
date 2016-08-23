@@ -20,7 +20,7 @@
   mkdir -p /opt/stackstorm/configs && \
   mount $MOUNT_ST2_CONFIGS /opt/stackstorm/configs
 
-SERVICES=${SERVICES:-"st2actionrunner st2api st2auth st2garbagecollector st2notifier st2resultstracker st2rulesengine st2sensorcontainer st2stream mistral nginx sshd"}
+SERVICES=${SERVICES:-"st2actionrunner st2api st2auth st2garbagecollector st2notifier st2resultstracker st2rulesengine st2sensorcontainer st2stream mistral nginx"}
 
 for SERVICE in $SERVICES; do
   systemctl enable $SERVICE

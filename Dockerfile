@@ -52,12 +52,8 @@ RUN rm -rf /tmp/pseudo
 RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
 
 RUN yum -y install gcc \
- && yum -y install openssh-server \
  && yum -y install nfs-utils \
  && yum clean all
-
-ADD delete-nologin.service /etc/systemd/system/delete-nologin.service
-RUN systemctl enable delete-nologin
 
 RUN cd /etc/nginx/conf.d \
  && curl -sSL -O https://raw.githubusercontent.com/StackStorm/st2/master/conf/HA/nginx/st2.conf.blueprint.sample
