@@ -33,18 +33,11 @@ RUN ln -s /bin/true /tmp/pseudo/bin/psql
 RUN ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage
 RUN touch /tmp/pseudo/pg_hba.conf
 
-RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/v1.6/scripts/st2bootstrap-el7.sh \
+RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/v2.0/scripts/st2bootstrap-el7.sh \
   | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
   | sed -e 's|/opt/stackstorm/mistral/bin/mistral-db-manage|/tmp/pseudo/bin/mistral-db-manage|g' \
-  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=1.6.0 \
+  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=2.0.0 \
  && yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel \
- && yum clean all
-
-# fix https request to st2api from mistral-server using insecure cert fails
-RUN yum -y install patch \
- && cd /opt/stackstorm/mistral/lib/python2.7/site-packages \
- && curl -sSL https://patch-diff.githubusercontent.com/raw/StackStorm/st2mistral/pull/20.diff | patch -p1 \
- && yum -y autoremove patch \
  && yum clean all
 
 RUN rm -rf /tmp/pseudo
