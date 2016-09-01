@@ -3,7 +3,8 @@ MAINTAINER "Shu Sugimoto" <shu@su.gimo.to>
 
 # run yum update first!
 # systemd package might be updated and that should come before the tweaks below
-RUN yum -y update
+RUN yum -y update \
+ && yum clean all
 
 # tweaks for running systemd inside container
 # see: https://hub.docker.com/_/centos/
