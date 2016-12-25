@@ -58,3 +58,4 @@ RUN chmod +x /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 EXPOSE 443
+VOLUME ["/opt/stackstorm/packs","/opt/stackstorm/configs","/opt/stackstorm/virtualenvs"]
