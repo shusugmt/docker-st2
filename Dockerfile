@@ -21,18 +21,18 @@ VOLUME [ "/sys/fs/cgroup" ]
 
 RUN sed -i '/nodocs/d' /etc/yum.conf
 
-RUN yum -y install sudo
-RUN sed -i -r "s/^Defaults\s+\+?requiretty/# Defaults requiretty/g" /etc/sudoers
-RUN sed -i -r "s/^Defaults\s+\+?secure_path.*/Defaults !secure_path/g" /etc/sudoers
+RUN yum -y install sudo \
+ && sed -i -r "s/^Defaults\s+\+?requiretty/# Defaults requiretty/g" /etc/sudoers \
+ && sed -i -r "s/^Defaults\s+\+?secure_path.*/Defaults !secure_path/g" /etc/sudoers
 
-RUN mkdir -p /tmp/pseudo/bin
-RUN ln -s /bin/true /tmp/pseudo/bin/systemctl
-RUN ln -s /bin/true /tmp/pseudo/bin/st2ctl
-RUN ln -s /bin/true /tmp/pseudo/bin/st2
-RUN ln -s /bin/true /tmp/pseudo/bin/postgresql-setup
-RUN ln -s /bin/true /tmp/pseudo/bin/psql
-RUN ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage
-RUN touch /tmp/pseudo/pg_hba.conf
+RUN mkdir -p /tmp/pseudo/bin \
+ && ln -s /bin/true /tmp/pseudo/bin/systemctl \
+ && ln -s /bin/true /tmp/pseudo/bin/st2ctl \
+ && ln -s /bin/true /tmp/pseudo/bin/st2 \
+ && ln -s /bin/true /tmp/pseudo/bin/postgresql-setup \
+ && ln -s /bin/true /tmp/pseudo/bin/psql \
+ && ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage \
+ && touch /tmp/pseudo/pg_hba.conf
 
 RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/scripts/st2bootstrap-el7.sh \
   | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
