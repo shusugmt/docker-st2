@@ -32,6 +32,7 @@ RUN mkdir -p /tmp/pseudo/bin \
  && ln -s /bin/true /tmp/pseudo/bin/postgresql-setup \
  && ln -s /bin/true /tmp/pseudo/bin/psql \
  && ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage \
+ && ln -s /bin/true /tmp/pseudo/bin/mongo \
  && touch /tmp/pseudo/pg_hba.conf
 
 RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/scripts/st2bootstrap-el7.sh \
