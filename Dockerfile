@@ -34,10 +34,10 @@ RUN mkdir -p /tmp/pseudo/bin \
  && ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage \
  && touch /tmp/pseudo/pg_hba.conf
 
-RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/scripts/st2bootstrap-el7.sh \
+RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/v2.1/scripts/st2bootstrap-el7.sh \
   | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
   | sed -e 's|/opt/stackstorm/mistral/bin/mistral-db-manage|/tmp/pseudo/bin/mistral-db-manage|g' \
-  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version= \
+  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=2.1.1 \
  && yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel \
  && yum clean all
 
