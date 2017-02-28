@@ -42,6 +42,12 @@ RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/master/s
  && yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel \
  && yum clean all
 
+# set default password for accessing mongo
+RUN crudini --set /etc/st2/st2.conf database password StackStorm
+
+# set default credentials for accessing postgres by mistral
+RUN crudini --set /etc/mistral/mistral.conf database connection postgresql://mistral:StackStorm@127.0.0.1/mistral
+
 RUN rm -rf /tmp/pseudo
 
 RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
