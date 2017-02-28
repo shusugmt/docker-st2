@@ -18,10 +18,10 @@ services:
       - ./id_rsa:/home/stanley/.ssh/stanley_rsa:ro
       - ./id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
     environment:
-      MONGO_HOST: mongo
-      RABBITMQ_HOST: rabbitmq
-      POSTGRES_HOST: postgres
-      REDIS_HOST: redis
+      MONGO_HOST: mongo.
+      RABBITMQ_HOST: rabbitmq.
+      POSTGRES_HOST: postgres.
+      REDIS_HOST: redis.
       WORKERS: 2
   rabbitmq:
     image: rabbitmq:3.6.4-management
