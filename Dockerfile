@@ -19,40 +19,12 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
-RUN sed -i '/nodocs/d' /etc/yum.conf
-
-RUN yum -y install sudo \
- && sed -i -r "s/^Defaults\s+\+?requiretty/# Defaults requiretty/g" /etc/sudoers \
- && sed -i -r "s/^Defaults\s+\+?secure_path.*/Defaults !secure_path/g" /etc/sudoers
-
-RUN mkdir -p /tmp/pseudo/bin \
- && ln -s /bin/true /tmp/pseudo/bin/systemctl \
- && ln -s /bin/true /tmp/pseudo/bin/st2ctl \
- && ln -s /bin/true /tmp/pseudo/bin/st2 \
- && ln -s /bin/true /tmp/pseudo/bin/postgresql-setup \
- && ln -s /bin/true /tmp/pseudo/bin/psql \
- && ln -s /bin/true /tmp/pseudo/bin/mistral-db-manage \
- && touch /tmp/pseudo/pg_hba.conf
-
-RUN curl -sSL https://raw.githubusercontent.com/StackStorm/st2-packages/v2.1/scripts/st2bootstrap-el7.sh \
-  | sed -e 's|/var/lib/pgsql/data/pg_hba.conf|/tmp/pseudo/pg_hba.conf|g' \
-  | sed -e 's|/opt/stackstorm/mistral/bin/mistral-db-manage|/tmp/pseudo/bin/mistral-db-manage|g' \
-  | PATH=/tmp/pseudo/bin:$PATH bash -s -x -- --user=test --password=changeme --version=2.1.1 \
- && yum -y autoremove mongodb-org rabbitmq-server postgresql-server postgresql-contrib postgresql-devel \
- && yum clean all
-
-RUN rm -rf /tmp/pseudo
-
-RUN bash -c 'source /opt/stackstorm/st2/bin/activate && pip install redis'
-
-RUN yum -y install gcc \
- && yum -y install nfs-utils \
- && yum clean all
-
-RUN cd /etc/nginx/conf.d \
- && curl -sSL -O https://raw.githubusercontent.com/StackStorm/st2/master/conf/HA/nginx/st2.conf.blueprint.sample
+ADD build_image.sh /root/build_image.sh
+RUN chmod +x /root/build_image.sh
+RUN /root/build_image.sh --version=2.1.1
 
 RUN rm -f /etc/systemd/system/multi-user.target.wants/*
+
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 CMD ["/entrypoint.sh"]

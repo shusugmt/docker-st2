@@ -13,17 +13,17 @@ services:
       - front-tier
       - back-tier
     volumes:
-      - ../id_rsa:/home/stanley/.ssh/stanley_rsa:ro
+      - ./id_rsa:/home/stanley/.ssh/stanley_rsa:ro
     environment:
-      MONGO_HOST: mongo
-      RABBITMQ_HOST: rabbitmq
-      POSTGRES_HOST: postgres
-      REDIS_HOST: redis
+      MONGO_HOST: mongo.
+      RABBITMQ_HOST: rabbitmq.
+      POSTGRES_HOST: postgres.
+      REDIS_HOST: redis.
       WORKERS: 2
       MOUNT_ST2_PACKS: -t nfs4 nfs:/packs
       MOUNT_ST2_CONFIGS: -t nfs4 nfs:/configs
       HA: "true"
-      HA_FRONT_HOST: st2front
+      HA_FRONT_HOST: st2front.
   st2node2:
     extends: st2node1
     environment:
@@ -65,18 +65,18 @@ services:
   nfs:
     image: st2-example-nfs
     build:
-      context: ./nfs
+      context: ../__misc_containers/nfs
     privileged: true
     networks:
       - back-tier
   remote1:
     image: st2-example-remote
     build:
-      context: ../remote
+      context: ../__misc_containers/remote
     networks:
       - front-tier
     volumes:
-      - ../id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
+      - ./id_rsa.pub:/home/stanley/.ssh/authorized_keys:ro
   remote2:
     extends: remote1
 
