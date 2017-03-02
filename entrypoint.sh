@@ -52,5 +52,10 @@ if [ "${HA,,}" = "true" ]; then
   fi
 fi
 
+# assure postgres db schema being up-to-date
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf upgrade head
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf current
+
 # launch systemd
 exec /usr/sbin/init
