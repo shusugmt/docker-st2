@@ -21,7 +21,7 @@ VOLUME [ "/sys/fs/cgroup" ]
 
 ADD build_image.sh /root/build_image.sh
 RUN chmod +x /root/build_image.sh
-RUN /root/build_image.sh
+RUN /root/build_image.sh --version=2.2.0
 
 RUN rm -f /etc/systemd/system/multi-user.target.wants/*
 
