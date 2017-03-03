@@ -57,5 +57,14 @@ fi
 /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
 /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf current
 
+# run custom init scripts
+for f in /entrypoint.d/*; do
+  case "$f" in
+    *.sh) echo "$0: running $f"; . "$f" ;;
+    *)    echo "$0: ignoring $f" ;;
+  esac
+  echo
+done
+
 # launch systemd
 exec /usr/sbin/init
